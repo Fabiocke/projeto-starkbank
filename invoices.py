@@ -85,7 +85,7 @@ def set_user():
         id = ID_USER , 
         private_key=get_private_key_content()
     )
-    starkbank.user=user.id
+    starkbank.user=user
 
 
 # envia de 8 a 12 faturas para clientes aleatórios

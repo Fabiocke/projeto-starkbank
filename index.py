@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return jsonify({'user': str(invoices.starkbank.user)}) 
+    return jsonify({'user': str(invoices.starkbank.user.id)}) 
 
 
 @app.route('/webhook', methods=['POST'])
