@@ -143,6 +143,7 @@ def webhook(req):
 # registra a transferência na base:
 def register_transfer(id_log, type_log, id_invoice, id_transfer, origin):
     transfer={'id':id_transfer,
+                'datetime': str(datetime.now()),
                 'id_log':id_log,
                 'type_log':type_log,
                 'id_invoice':id_invoice,
