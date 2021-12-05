@@ -1,8 +1,14 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify
+import starkbank
 import invoices
 import json
 
 app = Flask(__name__)
+
+
+@app.route('/')
+def home():
+    return jsonify({'user': str(invoices.starkbank.user)}) 
 
 
 @app.route('/webhook', methods=['POST'])
