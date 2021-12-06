@@ -3,15 +3,7 @@ import json
 import random
 from datetime import datetime, timedelta
 
-PRIVATE_KEY = '''-----BEGIN EC PRIVATE KEY-----
-MHQCAQEEIFhvbzc0aJBektUboMLvb1FRXTDdAlyKhv/dkxm6kxMsoAcGBSuBBAAK
-oUQDQgAEShmu6Ljj944SfZJ05OYBN92XRudx5htRShgkhHwCMyptee/elXeQX572
-xHwKwI2klzd47+OG+pYK3Lvi32lwtg==
------END EC PRIVATE KEY-----'''
-
 ENVIROMENT='sandbox'
-
-ID_USER='4508183066312704'
 
 ACCOUNT_ID = "20.018.183/0001-80"
 ACCOUNT_NAME = "Stark Bank S.A."
@@ -73,17 +65,12 @@ class InvoiceCreator:
         return invoices
     
 
-# Retorna a chave privada
-def get_private_key_content():
-    return PRIVATE_KEY
-
-
 # Instancia o usuário
-def set_user():
+def set_user(id_user, key):
     user = starkbank.Project( 
         environment = ENVIROMENT, 
-        id = ID_USER , 
-        private_key=get_private_key_content()
+        id = id_user , 
+        private_key=key
     )
     starkbank.user=user
 
@@ -214,5 +201,22 @@ def validatin_transfers():
     tv=TransferValidator(3)
     tv.validate()
 
+
+
+if __name__=="__main__":
+
+    PRIVATE_KEY = '''-----BEGIN EC PRIVATE KEY-----
+    MHQCAQEEIFhvbzc0aJBektUboMLvb1FRXTDdAlyKhv/dkxm6kxMsoAcGBSuBBAAK
+    oUQDQgAEShmu6Ljj944SfZJ05OYBN92XRudx5htRShgkhHwCMyptee/elXeQX572
+    xHwKwI2klzd47+OG+pYK3Lvi32lwtg==
+    -----END EC PRIVATE KEY-----'''
+
+    ID_USER='4508183066312704'
+
+    set_user(ID_USER, PRIVATE_KEY)
+    ic = InvoiceCreator()
+    invoices = ic.send_invoices_customers(1)
+    tv=TransferValidator(3)
+    print(tv.check_transfers())
 
 
