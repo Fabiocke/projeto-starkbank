@@ -23,5 +23,4 @@ def webhook():
 
 if __name__=='__main__':
     invoices.set_user()
-    invoices.create_webhook('https://project-starkbank.vercel.app/webhook')
-    
+    #invoices.create_webhook('https://project-starkbank.vercel.app/webhook')
