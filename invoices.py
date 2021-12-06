@@ -215,14 +215,6 @@ def get_login():
 
 
 
-if __name__=="__main__":
-    
-    set_user(*get_login())
-    #ic = InvoiceCreator(tags=['Teste'])
-    #invoices = ic.send_invoices_customers(1)
-    tv=TransferValidator(3)
-    print(tv.check_transfers())
-    #print(send_invoices(['Teste']))
 
 
 
