@@ -23,7 +23,7 @@ class Scheduler:
 
     def send_invoices(self):
         #invoices.send_invoices()
-        ic = invoices.InvoiceCreator()
+        ic = invoices.InvoiceCreator(['scheduler'])
         i=ic.send_invoices_customers(1)
         self.send_logs(i)
         return i
@@ -44,10 +44,11 @@ class Scheduler:
             self.send_invoices()
 
 
-    
 
-if __name__ == "__main__":
-    s=Scheduler(2)
-    s.start(5)
+def run():    
+    s=Scheduler(180)
+    s.start(60*24)
+
+
 
 

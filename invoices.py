@@ -1,9 +1,12 @@
+from ellipticcurve import privateKey
 import starkbank
 import json
 import random
 from datetime import datetime, timedelta
 
 ENVIROMENT='sandbox'
+
+ID_USER="4508183066312704"
 
 ACCOUNT_ID = "20.018.183/0001-80"
 ACCOUNT_NAME = "Stark Bank S.A."
@@ -15,8 +18,9 @@ ACCOUNT_TYPE = "payment"
 
 # Classe usada para gerar as faturas
 class InvoiceCreator:
-    def __init__(self, seed=None):
+    def __init__(self, seed=None, tags=[]):
         random.seed(seed)
+        self.tags=tags
         
     # Busca a base de clientes
     def get_customers(self):
@@ -37,13 +41,14 @@ class InvoiceCreator:
         data={'amount': amount,
         'fine': random.randint(5,30)/10,
         'interest': random.randint(1,15)/10,
+        'tags':self.tags,
         'descriptions': [
                 {
                     "key": f"{amount} balas.",
                     "value": f"R${amount},00"
                 }
             ]}
-    
+            
         data = {**data, **customer}
         return starkbank.Invoice(**data)
     
@@ -76,9 +81,9 @@ def set_user(id_user, key):
 
 
 # envia de 8 a 12 faturas para clientes aleatórios
-def send_invoices(seed=None):
+def send_invoices(seed=None, tags=[]):
     n = random.randint(8, 12)
-    ic = InvoiceCreator(seed)
+    ic = InvoiceCreator(seed, tags)
     invoices = ic.send_invoices_customers(n)
     return invoices
 
@@ -202,21 +207,22 @@ def validatin_transfers():
     tv.validate()
 
 
+# retorna o id e private key
+def get_login():
+    with open('privateKey.pem') as o:
+        PRIVATE_KEY = o.read()
+        return ID_USER, PRIVATE_KEY
+
+
 
 if __name__=="__main__":
-
-    PRIVATE_KEY = '''-----BEGIN EC PRIVATE KEY-----
-    MHQCAQEEIFhvbzc0aJBektUboMLvb1FRXTDdAlyKhv/dkxm6kxMsoAcGBSuBBAAK
-    oUQDQgAEShmu6Ljj944SfZJ05OYBN92XRudx5htRShgkhHwCMyptee/elXeQX572
-    xHwKwI2klzd47+OG+pYK3Lvi32lwtg==
-    -----END EC PRIVATE KEY-----'''
-
-    ID_USER='4508183066312704'
-
-    set_user(ID_USER, PRIVATE_KEY)
-    ic = InvoiceCreator()
-    invoices = ic.send_invoices_customers(1)
+    
+    set_user(*get_login())
+    #ic = InvoiceCreator(tags=['Teste'])
+    #invoices = ic.send_invoices_customers(1)
     tv=TransferValidator(3)
     print(tv.check_transfers())
+    #print(send_invoices(['Teste']))
+
 
 
