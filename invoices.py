@@ -102,9 +102,9 @@ def create_webhook(url):
 # transfere o valor recebido
 def set_transfer(amount, id_log):
     # external id para evitar erros de transferências duplicadas
-    external_id=f'{amount} {id_log} {str(datetime.now())}'
+    external_id=f'{amount} {id_log}'
     external_id=sha256(external_id.encode()).hexdigest()
-
+    
     transfers = starkbank.transfer.create([
         starkbank.Transfer(
             amount=amount,
@@ -219,5 +219,16 @@ def get_login():
         PRIVATE_KEY = o.read()
         return ID_USER, PRIVATE_KEY
 
+
+
+if __name__=="__main__":
+    
+    set_user(*get_login())
+    #ic = InvoiceCreator(tags=['Teste'])
+    #invoices = ic.send_invoices_customers(1)
+    tv=TransferValidator(3)
+    print(tv.check_transfers())
+    #print(send_invoices(tags=['Teste 4']))
+    
 
 
