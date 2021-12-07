@@ -42,8 +42,8 @@ class Scheduler:
     def run(self):
         finish=3600*24
         finish=50
-        t=time.time()
-        time.time()-t>=finish
+        #t=time.time()
+        #time.time()-t>=finish
         while True:
             self.send_invoices()
             Event().wait(1)
