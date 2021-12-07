@@ -48,8 +48,8 @@ class Scheduler:
         #t=time.time()
         #time.time()-t>=finish
         while True:
-            self.send_invoices()
-            #Event().wait(1)
+            #self.send_invoices()
+            Event().wait(1)
             break
             #if time.time()-t >= finish:
             #    break
