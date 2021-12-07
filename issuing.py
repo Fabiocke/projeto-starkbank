@@ -9,7 +9,6 @@ import time
 
 class Scheduler:
     def __init__(self):
-        invoices.set_user(*invoices.get_login())
         self.thread = Thread(target=self.run)
 
     def send_invoices(self):
@@ -43,12 +42,13 @@ class Scheduler:
     # rodará por 24 horas a cada 3 horas
     # No final verifica se há transferências que não foram feitas
     def run(self):
+        invoices.set_user(*invoices.get_login())
         finish=3600*24
         finish=50
         #t=time.time()
         #time.time()-t>=finish
         while True:
-            #self.send_invoices()
+            self.send_invoices()
             Event().wait(1)
             break
             #if time.time()-t >= finish:
