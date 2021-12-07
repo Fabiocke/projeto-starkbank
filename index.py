@@ -22,9 +22,8 @@ def webhook():
 # Inicia o job de 24 horas
 @app.route('/start_issuing')
 def start_issuing():
-    alive=scheduler.thread.is_alive()
     r=scheduler.start()
-    return jsonify({**r, **{'alive':alive}})
+    return jsonify({**r})
 
 @app.route('/get_scheduler')
 def get_scheduler():
