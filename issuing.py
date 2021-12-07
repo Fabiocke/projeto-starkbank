@@ -39,6 +39,25 @@ class Scheduler:
         return
         self.validate()
 
+
+    # rodará por 24 horas a cada 3 horas
+    # No final verifica se há transferências que não foram feitas
+    def run(self):
+        finish=3600*24
+        finish=50
+        t=time.time()
+        #time.time()-t
+        while True:
+            break
+            self.send_invoices()
+            Event().wait(1)
+            break
+            #if time.time()-t >= finish:
+            #    break
+        self.reset_thread()
+        return
+        self.validate()
+
     def reset_thread(self):
         self.thread=Thread(target=self.run)
     
