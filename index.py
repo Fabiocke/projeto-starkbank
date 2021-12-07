@@ -23,7 +23,7 @@ def webhook():
 @app.route('/start_issuing')
 def start_issuing():
     r=scheduler.start()
-    return jsonify(r)
+    return jsonify({**r, **{'alive':scheduler.thread.is_alive()}})
 
 
 invoices.set_user(*invoices.get_login())

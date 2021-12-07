@@ -36,10 +36,13 @@ class Scheduler:
             time.sleep(60)
             if time.time()-t >= finish:
                 break
-        self.thread=Thread(target=self.run)
+        self.reset_thread()
         return
         self.validate()
 
+    def reset_thread(self):
+        self.thread=Thread(target=self.run)
+    
 
     def start(self):
         if not self.thread.is_alive():
