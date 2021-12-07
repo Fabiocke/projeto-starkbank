@@ -4,7 +4,8 @@ import starkbank
 def test_login_api():
     expected = "4508183066312704"
     invoices.set_user(*invoices.get_login())
-    assert invoices.starkbank.user.id==expected
+    result = invoices.starkbank.user.id
+    result ==expected
 
 
 def tests_the_invoice_is_being_generated_correctly():

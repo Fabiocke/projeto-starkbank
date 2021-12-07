@@ -19,14 +19,16 @@ def webhook():
         abort(400)
 
 
+# Inicia o job de 24 horas
 @app.route('/start_issuing')
 def start_issuing():
-    r=issuing.start()
+    r=scheduler.start()
     return jsonify(r)
 
 
 invoices.set_user(*invoices.get_login())
 invoices.create_webhook('https://project-starkbank.vercel.app/webhook')
+scheduler = issuing.Scheduler()
 
 if __name__=='__main__':
     app.run()

@@ -84,9 +84,8 @@ class TransferValidator:
             before=before,
             limit=None
         )
+        return [i for i in logs]
 
-        return [log.id for log in logs if log.type=='credited']
-    
     # Retorna os logs das fasturas que foram creditadas e transferidas
     def get_invoices_transfers(self, after, before):
         transfers = starkbank.transfer.query(
@@ -225,8 +224,8 @@ if __name__=="__main__":
     #invoices = ic.send_invoices_customers(1)
     tv=TransferValidator(3)
     print(tv.check_transfers())
-    print(send_invoices(tags=['Teste 6']))
-    print(send_invoices(tags=['Teste 6']))
+    #print(send_invoices(tags=['Teste 6']))
+    #print(send_invoices(tags=['Teste 6']))
     
 
 
