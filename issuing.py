@@ -29,13 +29,14 @@ class Scheduler:
         finish=60*1.5
         t=time.time()
         while True:
-            return
+            break
             invoices.set_user(*invoices.get_login())
             self.send_invoices()
             time.sleep(60)
             if time.time()-t >= finish:
                 break
         self.thread=Thread(target=self.run)
+        return
         self.validate()
 
 
