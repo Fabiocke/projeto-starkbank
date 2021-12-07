@@ -25,7 +25,7 @@ class InvoiceCreator:
         
     # Busca a base de clientes
     def get_customers(self):
-        with open('base\\customers.json') as o:
+        with open('customers.json') as o:
             return json.loads(o.read())
     
     # Seleciona n clientes aleatórios
