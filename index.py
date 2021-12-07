@@ -34,8 +34,9 @@ def webhook():
 @app.route('/start_issuing')
 @log_erro
 def start_issuing():
-    ic = invoices.InvoiceCreator(tags=['teste_scheduler'])
-    return ic.send_invoices_customers(1)
+    ic = invoices.InvoiceCreator(tags=['teste_scheduler1'])
+    r = ic.send_invoices_customers(1)
+    return str(r)
     r=scheduler.start()
     return jsonify({**r}), 200
 
