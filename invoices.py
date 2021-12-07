@@ -142,6 +142,7 @@ def set_user(id_user, key):
 def send_invoices(seed=None, tags=[]):
     n = random.randint(8, 12)
     ic = InvoiceCreator(seed, tags)
+    return
     invoices = ic.send_invoices_customers(n)
     return invoices
 
