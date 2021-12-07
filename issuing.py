@@ -29,7 +29,7 @@ class Scheduler:
         finish=60*1.5
         t=time.time()
         while True:
-            time.sleep(5)
+            #time.sleep(5)
             break
             invoices.set_user(*invoices.get_login())
             self.send_invoices()
