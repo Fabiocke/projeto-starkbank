@@ -4,6 +4,9 @@ import time
 
 # Modulo para fazer o scheduler
 
+# Decorador para retornar o log do ero
+
+
 class Scheduler:
     def __init__(self):
         invoices.set_user(*invoices.get_login())
@@ -45,7 +48,7 @@ class Scheduler:
         #t=time.time()
         #time.time()-t>=finish
         while True:
-            self.send_invoices()
+            return self.send_invoices()
             Event().wait(1)
             break
             #if time.time()-t >= finish:

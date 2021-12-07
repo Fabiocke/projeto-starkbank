@@ -34,7 +34,8 @@ def webhook():
 @app.route('/start_issuing')
 @log_erro
 def start_issuing():
-    r=scheduler.start()
+    r=scheduler.run()
+    r={'x': str(r)}
     return jsonify({**r}), 200
 
 
