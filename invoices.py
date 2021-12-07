@@ -67,6 +67,7 @@ class InvoiceCreator:
     # Envia uma lista de faturas de n clinetes
     def send_invoices_customers(self, n):
         faturas=self.get_invoices_customers(n)
+        return
         invoices=starkbank.invoice.create(faturas)
         return invoices
     
