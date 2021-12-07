@@ -1,7 +1,5 @@
 from flask import Flask, request, abort, jsonify
-import starkbank
 import invoices
-import json
 import issuing
 
 app = Flask(__name__)
@@ -16,15 +14,15 @@ def home():
 def webhook():
     if request.method=='POST':
         r=invoices.webhook(request.json)
-        return 'Sucess', 200
+        return 'Success', 200
     else:
         abort(400)
 
 
 @app.route('/start_issuing')
 def start_issuing():
-    issuing.run()
-    return 'issuing started'
+    r=issuing.start()
+    return jsonify(r)
 
 
 invoices.set_user(*invoices.get_login())
