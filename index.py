@@ -4,10 +4,21 @@ import issuing
 
 app = Flask(__name__)
 
+# Decorador para retornar o log do ero
+import traceback
+def log_erro(f):
+    def func_erro(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except:
+            return {'status': 'erro', 'log': traceback.format_exc()}, 400
+
+    return func_erro
+
 
 @app.route('/')
 def home():
-    return jsonify({'user': str(invoices.starkbank.user.id)}) 
+    return jsonify({'user': str(invoices.starkbank.user.id)}), 200
 
 
 @app.route('/webhook', methods=['POST'])
@@ -21,18 +32,19 @@ def webhook():
 
 # Inicia o job de 24 horas
 @app.route('/start_issuing')
+@log_erro
 def start_issuing():
     r=scheduler.start()
-    return jsonify({**r})
+    return jsonify({**r}), 200
 
-@app.route('/get_scheduler')
-def get_scheduler():
-    return str(scheduler)
 
 
 invoices.set_user(*invoices.get_login())
 invoices.create_webhook('https://project-starkbank.vercel.app/webhook')
 scheduler = issuing.Scheduler()
+
+
+
 
 if __name__=='__main__':
     app.run()

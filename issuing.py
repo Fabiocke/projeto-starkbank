@@ -27,28 +27,25 @@ class Scheduler:
     # No final verifica se há transferências que não foram feitas
     def run(self):
         finish=3600*24
-        finish=50
+        finish=80
         t=time.time()
         while True:
             self.send_invoices()
-            Event().wait(1)
-            break
-            #if time.time()-t >= finish:
-            #    break
+            Event().wait(30)
+            if time.time()-t >= finish:
+                break
         self.reset_thread()
-        return
         self.validate()
 
 
     # rodará por 24 horas a cada 3 horas
     # No final verifica se há transferências que não foram feitas
-    def run(self):
+    def runs(self):
         finish=3600*24
         finish=50
         t=time.time()
         time.time()-t>=finish
         while True:
-            break
             self.send_invoices()
             Event().wait(1)
             break
@@ -71,4 +68,7 @@ class Scheduler:
 
 
 
+if __name__=='__main__':
+    scheduler=Scheduler()
+    scheduler.start()
 

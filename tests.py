@@ -1,5 +1,4 @@
 import invoices
-import starkbank
 
 def test_login_api():
     expected = "4508183066312704"
