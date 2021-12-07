@@ -71,6 +71,64 @@ class InvoiceCreator:
         return invoices
     
 
+
+# Verifica se todos os valores foram transferidos automaticamente pelo webhook pros últimos "days" dias, e transfere os que não foram feitos
+class TransferValidator:
+    def __init__(self, days):
+        self.days=days
+    
+    # Busca os ids dos logs das faturas que foram creditadas
+    def get_credited_invoices_log_id(self, after, before):
+        logs = starkbank.invoice.log.query(
+            after=after,
+            before=before,
+            limit=None
+        )
+
+        return [log.id for log in logs if log.type=='credited']
+    
+    # Retorna os logs das fasturas que foram creditadas e transferidas
+    def get_invoices_transfers(self, after, before):
+        transfers = starkbank.transfer.query(
+            after=after,
+            before=before
+        )
+
+        invoices_transfers = [i.tags[1] for i in transfers if 'invoice' in i.tags]
+        return invoices_transfers
+    
+    
+    # Retorna os logs que não tiveram a transferência realizada
+    def check_transfers(self):
+        after=(datetime.now()-timedelta(self.days)).strftime('%Y-%m-%d')
+        before=datetime.now().strftime('%Y-%m-%d')
+        
+        credited=self.get_credited_invoices_log_id(after, before)
+        logs_credited=[log for log in credited if log.type=='credited']
+        logs_transferred=self.get_invoices_transfers(after, before)
+        pendency=[i for i in logs_credited if i.id not in logs_transferred]
+        return pendency
+    
+    # Realiza a transferência
+    def transfer(self, log):
+        amount=log.invoice.amount-log.invoice.fee
+        transfer = set_transfer(amount, log.id)
+        register_transfer(log.id, log.type, log.invoice.id, transfer.id, 'robot')
+    
+    # validar e transferir
+    def validate(self):        
+        logs=self.check_transfers()
+        for log in logs:
+            self.transfer(log)
+
+
+# retorna o id e private key
+def get_login():
+    with open('privateKey.pem') as o:
+        PRIVATE_KEY = o.read()
+        return ID_USER, PRIVATE_KEY
+
+
 # Instancia o usuário
 def set_user(id_user, key):
     user = starkbank.Project( 
@@ -133,9 +191,7 @@ def webhook(req):
     
     if type_log=='credited':
         transfer = set_transfer(amount, id_log)
-    else:
-        transfer={}
-    register_transfer(id_log, type_log, id_invoice, transfer.id, 'webhook')
+        register_transfer(id_log, type_log, id_invoice, transfer.id, 'webhook')
 
 
 # registra a transferência na base:
@@ -154,70 +210,11 @@ def register_transfer(id_log, type_log, id_invoice, id_transfer, origin):
         json.dump(data, o, indent=4)
 
 
-
-# Verifica se todos os valores foram transferidos automaticamente pelo webhook pros últimos "days" dias, e transfere os que não foram feitos
-class TransferValidator:
-    def __init__(self, days):
-        self.days=days
-    
-    # Busca os ids dos logs das faturas que foram creditadas
-    def get_credited_invoices_log_id(self, after, before):
-        logs = starkbank.invoice.log.query(
-            after=after,
-            before=before,
-            limit=None
-        )
-
-        return [i for i in logs]
-        return [log.id for log in logs if log.type=='credited']
-    
-    # Retorna os logs das fasturas que foram creditadas e transferidas
-    def get_invoices_transfers(self, after, before):
-        transfers = starkbank.transfer.query(
-            after=after,
-            before=before
-        )
-
-        invoices_transfers = [i.tags[1] for i in transfers if 'invoice' in i.tags]
-        return invoices_transfers
-    
-    
-    # Retorna os logs que não tiveram a transferência realizada
-    def check_transfers(self):
-        after=(datetime.now()-timedelta(self.days)).strftime('%Y-%m-%d')
-        before=datetime.now().strftime('%Y-%m-%d')
-        
-        credited=self.get_credited_invoices_log_id(after, before)
-        logs_credited=[log for log in credited if log.type=='credited']
-        logs_transferred=self.get_invoices_transfers(after, before)
-        pendency=[i for i in logs_credited if i.id not in logs_transferred]
-        return pendency
-    
-    # Realiza a transferência
-    def transfer(self, log):
-        amount=log.invoice.amount-log.invoice.fee
-        transfer = set_transfer(amount, log.id)
-        register_transfer(log.id, log.type, log.invoice.id, transfer.id, 'robot')
-    
-    # validar e transferir
-    def validate(self):        
-        logs=self.check_transfers()
-        for log in logs:
-            self.transfer(log)
-
-
-
 # checa os créditos dos últimos 3 dias e transfere caso não tenha sido transferido 
 def validatin_transfers():
     tv=TransferValidator(3)
     tv.validate()
 
-
-# retorna o id e private key
-def get_login():
-    with open('privateKey.pem') as o:
-        PRIVATE_KEY = o.read()
-        return ID_USER, PRIVATE_KEY
 
 
 
@@ -228,7 +225,8 @@ if __name__=="__main__":
     #invoices = ic.send_invoices_customers(1)
     tv=TransferValidator(3)
     print(tv.check_transfers())
-    #print(send_invoices(tags=['Teste 4']))
+    print(send_invoices(tags=['Teste 6']))
+    print(send_invoices(tags=['Teste 6']))
     
 
 

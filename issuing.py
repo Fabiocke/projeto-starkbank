@@ -1,4 +1,4 @@
-from apscheduler.schedulers.background import BackgroundScheduler
+'''from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 import invoices
 import json
@@ -22,11 +22,7 @@ class Scheduler:
         self.scheduler.shutdown()
 
     def send_invoices(self):
-        #invoices.send_invoices()
-        ic = invoices.InvoiceCreator(tags=['scheduler'])
-        i=ic.send_invoices_customers(1)
-        self.send_logs(i)
-        return i
+        return send_invoices()
 
     def send_logs(self, invoices):
         with open(r'base\\invoices.json', 'r+') as o:
@@ -41,13 +37,35 @@ class Scheduler:
         if datetime.now()>=self.finish:
             self.shutdown()
         else:
-            self.send_invoices()
+            self.send_invoices()'''
 
+import invoices
+import json
 
+def send_invoices():
+    i = invoices.send_invoices(tags=['scheduler'])
+    return i
 
-def run():    
+def send_invoices():
+    ic = invoices.InvoiceCreator(['teste_scheduler'])
+    ic.send_invoices_customers(1)
+
+# valida as transferências dos últimos 3 dias
+def validate():
+    tv=invoices.TransferValidator(3)
+    tv.validate()
+
+'''def run():    
     s=Scheduler(180)
-    s.start(60*24)
+    s.start(60*24)'''
+
+import time
+def run():
+    while True:
+        invoices.set_user(*invoices.get_login())
+        send_invoices()
+        time.sleep(120)
+
 
 
 
