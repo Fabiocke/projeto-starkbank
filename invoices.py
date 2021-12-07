@@ -31,6 +31,7 @@ class InvoiceCreator:
     # Seleciona n clientes aleatórios
     def get_random_customers(self, n):
         base = self.get_customers()
+        return
         choices = random.sample(list(base), n)
         return list(map(base.get, choices))
     
@@ -61,7 +62,6 @@ class InvoiceCreator:
     
     # Gera uma lista de faturas pra n clientes
     def get_invoices_customers(self, n):
-        return
         customers=self.get_random_customers(n)
         return
         return self.get_invoices(customers)
