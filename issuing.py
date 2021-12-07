@@ -6,6 +6,7 @@ import time
 
 class Scheduler:
     def __init__(self):
+        invoices.set_user(*invoices.get_login())
         self.thread = Thread(target=self.run)
 
     def send_invoices(self):
@@ -29,9 +30,8 @@ class Scheduler:
         finish=60*1.5
         t=time.time()
         while True:
-            Event().wait(5)
+            Event().wait(30)
             break
-            invoices.set_user(*invoices.get_login())
             self.send_invoices()
             time.sleep(60)
             if time.time()-t >= finish:
