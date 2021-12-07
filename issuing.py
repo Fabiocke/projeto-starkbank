@@ -46,7 +46,7 @@ class Scheduler:
         finish=3600*24
         finish=50
         t=time.time()
-        #time.time()-t
+        time.time()-t>=finish
         while True:
             break
             self.send_invoices()
