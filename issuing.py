@@ -39,7 +39,7 @@ class Scheduler:
 
     # rodará por 24 horas a cada 3 horas
     # No final verifica se há transferências que não foram feitas
-    def runs(self):
+    def run(self):
         finish=3600*24
         finish=50
         t=time.time()
