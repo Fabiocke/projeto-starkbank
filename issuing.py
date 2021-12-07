@@ -32,6 +32,7 @@ class Scheduler:
         while True:
             self.send_invoices()
             Event().wait(60)
+            break
             #if time.time()-t >= finish:
             #    break
         self.reset_thread()
