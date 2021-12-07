@@ -15,6 +15,7 @@ class Scheduler:
 
     def send_invoices(self):
         ic = invoices.InvoiceCreator(tags=['teste_scheduler'])
+        return
         ic.send_invoices_customers(1)
 
     # valida as transferências dos últimos 3 dias
