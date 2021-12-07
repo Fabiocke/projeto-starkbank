@@ -202,7 +202,7 @@ def register_transfer(id_log, type_log, id_invoice, id_transfer, origin):
                 'id_invoice':id_invoice,
                 'origin':origin}
 
-    with open(r'base\\transfers.json', 'r+') as o:
+    with open(r'transfers.json', 'r+') as o:
         data = json.load(o)
         data.update({str(id_transfer):transfer})
         o.seek(0)
