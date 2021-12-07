@@ -30,8 +30,8 @@ class Scheduler:
         finish=60*1.5
         t=time.time()
         while True:
-            Event().wait(30)
             self.send_invoices()
+            Event().wait(30)
             break
             if time.time()-t >= finish:
                 break
