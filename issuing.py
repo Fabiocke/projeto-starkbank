@@ -36,7 +36,7 @@ class Scheduler:
             Event().wait(30)
             break
             if time.time()-t >= finish:
-                break
+                breakc
         self.reset_thread()
         return
         self.validate()
