@@ -1,5 +1,5 @@
 import invoices
-from threading import Thread
+from threading import Thread, Event
 import time
 
 # Modulo para fazer o scheduler
@@ -29,7 +29,7 @@ class Scheduler:
         finish=60*1.5
         t=time.time()
         while True:
-            #time.sleep(5)
+            Event().wait(5)
             break
             invoices.set_user(*invoices.get_login())
             self.send_invoices()
