@@ -31,7 +31,7 @@ class Scheduler:
         t=time.time()
         while True:
             self.send_invoices()
-            Event().wait(15)
+            Event().wait(1)
             break
             #if time.time()-t >= finish:
             #    break
