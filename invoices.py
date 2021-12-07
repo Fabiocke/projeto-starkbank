@@ -62,7 +62,6 @@ class InvoiceCreator:
     # Gera uma lista de faturas pra n clientes
     def get_invoices_customers(self, n):
         customers=self.get_random_customers(n)
-        return
         return self.get_invoices(customers)
     
     # Envia uma lista de faturas de n clinetes
