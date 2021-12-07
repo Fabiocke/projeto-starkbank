@@ -27,11 +27,11 @@ class Scheduler:
     # No final verifica se há transferências que não foram feitas
     def run(self):
         finish=3600*24
-        finish=60*1.5
+        finish=50
         t=time.time()
         while True:
             self.send_invoices()
-            Event().wait(60)
+            Event().wait(15)
             break
             #if time.time()-t >= finish:
             #    break
