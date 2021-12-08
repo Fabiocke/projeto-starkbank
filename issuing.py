@@ -1,3 +1,4 @@
+from datetime import datetime
 import invoices
 from threading import Thread, Event
 import time
@@ -15,10 +16,6 @@ class Scheduler:
         i = invoices.send_invoices(tags=['scheduler'])
         return i
 
-    def send_invoices(self):
-        ic = invoices.InvoiceCreator(tags=['teste_scheduler'])
-        return ic.send_invoices_customers(1)
-
     # valida as transferências dos últimos 3 dias
     def validate(self):
         tv=invoices.TransferValidator(3)
@@ -28,34 +25,20 @@ class Scheduler:
     # rodará por 24 horas a cada 3 horas
     # No final verifica se há transferências que não foram feitas
     def run(self):
+        invoices.set_user(*invoices.get_login())
+        print('start process...')
         finish=3600*24
+        interval=3600*3
         t=time.time()
         while True:
-            self.send_invoices()
-            Event().wait(3600*3)
+            r=self.send_invoices()
+            print(f'{len(r)} faturas emitidas em {str(datetime.now())}')
+            Event().wait(interval)
             if time.time()-t >= finish:
                 break
         self.reset_thread()
         self.validate()
-
-
-    # rodará por 24 horas a cada 3 horas
-    # No final verifica se há transferências que não foram feitas
-    def run(self):
-        invoices.set_user(*invoices.get_login())
-        finish=3600*24
-        finish=50
-        #t=time.time()
-        #time.time()-t>=finish
-        while True:
-            self.send_invoices()
-            Event().wait(1)
-            break
-            #if time.time()-t >= finish:
-            #    break
-        self.reset_thread()
-        return
-        self.validate()
+        print('end process...')
 
     def reset_thread(self):
         self.thread=Thread(target=self.run)
@@ -73,4 +56,5 @@ class Scheduler:
 if __name__=='__main__':
     scheduler=Scheduler()
     scheduler.start()
+    
 

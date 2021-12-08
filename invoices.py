@@ -1,4 +1,3 @@
-from ellipticcurve import privateKey
 import starkbank
 import json
 import random
@@ -67,7 +66,6 @@ class InvoiceCreator:
     # Envia uma lista de faturas de n clinetes
     def send_invoices_customers(self, n):
         faturas=self.get_invoices_customers(n)
-        return
         invoices=starkbank.invoice.create(faturas)
         return invoices
     
@@ -151,10 +149,10 @@ def send_invoices(seed=None, tags=[]):
 def create_webhook(url):
     webhooks = starkbank.webhook.query()
     if url not in [i.url for i in webhooks]:
-        starkbank.webhook.create( 
+        webhook=starkbank.webhook.create( 
             url = url, 
             subscriptions = [ "invoice" ])
-
+        return webhook
 
 
 # transfere o valor recebido
@@ -215,18 +213,5 @@ def validatin_transfers():
     tv=TransferValidator(3)
     tv.validate()
 
-
-
-
-if __name__=="__main__":
     
-    set_user(*get_login())
-    #ic = InvoiceCreator(tags=['Teste'])
-    #invoices = ic.send_invoices_customers(1)
-    tv=TransferValidator(3)
-    print(tv.check_transfers())
-    #print(send_invoices(tags=['Teste 6']))
-    #print(send_invoices(tags=['Teste 6']))
-    
-
 
